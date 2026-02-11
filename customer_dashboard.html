@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Customer Dashboard - Cargo RLD</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#2c5364,#203a43,#0f2027);color:#fff;transition:margin-left 0.3s;}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:15px;background:rgba(0,0,0,0.2);}
+.menu{font-size:26px;cursor:pointer;}
+.profile{width:40px;height:40px;background:#ccc;border-radius:50%;cursor:pointer;}
+.box{background:#fff;color:#333;padding:25px;border-radius:12px;max-width:450px;margin:20px auto;box-shadow:0 10px 30px rgba(0,0,0,0.35);text-align:center;}
+h2{color:#2c5364;}
+button{width:100%;padding:14px;margin-top:12px;font-size:16px;border:none;border-radius:8px;cursor:pointer;}
+.primary{background:#2980b9;color:white;}
+.secondary{background:#27ae60;color:white;}
+.drivers-section,.chat-section{display:none;text-align:left;margin-top:20px;}
+.driver{background:#ecf0f1;color:#333;padding:10px;margin-bottom:10px;border-radius:8px;}
+.send-btn{width:100%;padding:10px;margin-top:5px;background:#f39c12;color:white;border:none;border-radius:6px;cursor:pointer;}
+.request-list{margin-top:20px;}
+.request-item{border:1px solid #ddd;border-radius:8px;padding:12px;margin-bottom:10px;background:#ecf0f1;color:#333;}
+.message{max-width:70%;margin:5px 0;padding:10px;border-radius:10px;clear:both;word-wrap:break-word;}
+.customer-msg{background:#2980b9;color:white;float:left;}
+.driver-msg{background:#fff;color:#333;float:right;}
+.chat-input{width:100%;padding:10px;margin-top:5px;border-radius:8px;border:none;font-size:14px;}
+.send-btn-chat{padding:10px;margin-top:5px;width:100%;border:none;border-radius:6px;background:#f39c12;color:white;cursor:pointer;}
+
+/* Sidebar */
+.sidebar{height:100%;width:0;position:fixed;z-index:10;top:0;left:0;background:#1a1a1a;overflow-x:hidden;transition:0.3s;padding-top:60px;}
+.sidebar .closebtn{position:absolute;top:15px;right:25px;font-size:30px;cursor:pointer;}
+.sidebar img{width:80px;height:80px;border-radius:50%;display:block;margin:0 auto 10px;}
+.sidebar h3,p{text-align:center;margin:5px 0;color:white;}
+.sidebar a{padding:10px 15px;text-decoration:none;font-size:18px;color:#ccc;display:flex;align-items:center;border-bottom:1px solid #333;position:relative;}
+.sidebar a:hover{background:#2980b9;color:white;}
+.sidebar i{margin-right:12px;}
+.notification-badge{display:inline-block;background:red;color:white;font-size:12px;width:18px;height:18px;border-radius:50%;text-align:center;line-height:18px;margin-left:5px;}
+</style>
+</head>
+
+<body>
+<div class="topbar">
+  <div class="menu" onclick="openSidebar()">☰</div>
+  <div class="profile" onclick="goProfile()"></div>
+</div>
+
+<div class="box">
+  <h2>Welcome to Cargo RLD</h2>
+  <p>Manage your deliveries and find drivers easily</p>
+
+  <button class="primary" onclick="toggleDrivers()">🚚 View Available Drivers</button>
+  <button class="primary" onclick="toggleRequests()">📋 My Requests</button>
+  <button class="secondary" onclick="toggleChat()">💬 Chat</button>
+
+  <div class="drivers-section" id="driversSection"></div>
+  <div class="request-list" id="requestList"></div>
+  <div class="chat-section" id="chatSection">
+    <div id="chatMessages" style="max-height:300px;overflow-y:auto;"></div>
+    <input type="text" id="chatInput" class="chat-input" placeholder="Type a message...">
+    <button class="send-btn-chat" onclick="sendChat()">Send</button>
+  </div>
+</div>
+
+<div id="mySidebar" class="sidebar">
+  <span class="closebtn" onclick="closeSidebar()">×</span>
+  <img src="profile.png" alt="Profile">
+  <h3 id="sidebarName">Demo Customer</h3>
+  <p id="sidebarRole">Customer</p>
+
+  <a href="requests.html" id="requestLink"><i class="fa fa-clipboard-list"></i> Requests<span class="notification-badge" id="requestNotif" style="display:none">0</span></a>
+  <a href="chat.html" onclick="localStorage.setItem('chatRole','customer')"><i class="fa fa-comment"></i> Chat<span class="notification-badge" id="chatNotif" style="display:none">0</span></a>
+  <a href="payment.html"><i class="fa fa-credit-card"></i> Payment</a>
+  <a href="subscription.html"><i class="fa fa-dollar-sign"></i> Subscription</a>
+  <a href="tracking.html"><i class="fa fa-location-dot"></i> Tracking</a>
+  <a href="points.html"><i class="fa fa-coins"></i> Points</a>
+  <a href="profile.html"><i class="fa fa-user"></i> Profile</a>
+</div>
+
+<script>
+function openSidebar(){document.getElementById("mySidebar").style.width="250px";}
+function closeSidebar(){document.getElementById("mySidebar").style.width="0";}
+function goProfile(){window.location.href="profile.html";}
+
+/* Toggle sections */
+function toggleDrivers(){
+  const s=document.getElementById("driversSection");
+  s.style.display=s.style.display==="block"?"none":"block";
+  loadDrivers();
+}
+function toggleRequests(){
+  const s=document.getElementById("requestList");
+  s.style.display=s.style.display==="block"?"none":"block";
+  loadCustomerRequests();
+}
+function toggleChat(){
+  const s=document.getElementById("chatSection");
+  s.style.display=s.style.display==="block"?"none":"block";
+  loadChat();
+}
+
+/* Drivers Section */
+function loadDrivers(){
+  const section=document.getElementById("driversSection");
+  section.innerHTML='';
+  let drivers=["John Doe","Sarah M","Peter L"];
+  drivers.forEach(d=>{
+    const div=document.createElement('div');
+    div.className='driver';
+    div.innerHTML=`
+      <p><b>Name:</b> ${d}</p>
+      <p><b>Location:</b> Example Location</p>
+      <button class="send-btn" onclick="sendRequest('${d}')">Send Request</button>
+    `;
+    section.appendChild(div);
+  });
+}
+
+/* Send Request */
+function sendRequest(driverName){
+  let requests=JSON.parse(localStorage.getItem("requests")||"[]");
+  requests.push({customer:"Demo Customer",from:"Customer Location",to:"Destination",cargo:"General Cargo",price:500,driver:null,status:"Pending"});
+  localStorage.setItem("requests",JSON.stringify(requests));
+  alert("📣 Request sent to " + driverName);
+  updateRequestNotification();
+}
+
+/* Customer Requests */
+function loadCustomerRequests(){
+  const section=document.getElementById("requestList");
+  section.innerHTML='';
+  let requests=JSON.parse(localStorage.getItem("requests")||"[]");
+  requests.forEach(r=>{
+    const div=document.createElement('div');
+    div.className='request-item';
+    div.innerHTML=`
+      <p><b>Cargo:</b> ${r.cargo}</p>
+      <p><b>From:</b> ${r.from}</p>
+      <p><b>To:</b> ${r.to}</p>
+      <p><b>Driver:</b> ${r.driver||'Not assigned yet'}</p>
+      <p><b>Status:</b> ${r.status||'Pending'}</p>
+      <p><b>Price:</b> R${r.price}</p>
+    `;
+    section.appendChild(div);
+  });
+}
+
+/* Real Chat */
+function loadChat(){
+  const chatContainer=document.getElementById("chatMessages");
+  chatContainer.innerHTML='';
+  let chats=JSON.parse(localStorage.getItem('chats')||'[]');
+  chats.forEach(c=>{
+    const div=document.createElement('div');
+    div.className='message '+(c.to==='customer'?'customer-msg':'driver-msg');
+    div.innerText=c.message;
+    chatContainer.appendChild(div);
+  });
+  chatContainer.scrollTop=chatContainer.scrollHeight;
+}
+
+function sendChat(){
+  const input=document.getElementById("chatInput");
+  const msg=input.value.trim();
+  if(msg==='') return;
+  let chats=JSON.parse(localStorage.getItem('chats')||'[]');
+  chats.push({from:'customer',to:'driver',message:msg,read:false});
+  localStorage.setItem('chats',JSON.stringify(chats));
+  input.value='';
+  loadChat();
+  updateChatNotification();
+}
+
+/* Notifications */
+function updateRequestNotification(){
+  let requests=JSON.parse(localStorage.getItem('requests')||'[]');
+  let pending=requests.filter(r=>!r.driver).length;
+  const badge=document.getElementById("requestNotif");
+  if(pending>0){badge.style.display="inline-block";badge.innerText=pending;}
+  else badge.style.display="none";
+}
+function updateChatNotification(){
+  let chats=JSON.parse(localStorage.getItem('chats')||'[]');
+  let unread=chats.filter(c=>c.to==='customer' && !c.read).length;
+  const badge=document.getElementById("chatNotif");
+  if(unread>0){badge.style.display="inline-block";badge.innerText=unread;}
+  else badge.style.display="none";
+}
+
+updateRequestNotification();
+updateChatNotification();
+</script>
+</body>
+</html>

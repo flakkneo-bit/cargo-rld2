@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login - Cargo RLD</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#2c5364,#203a43,#0f2027);color:#fff;display:flex;justify-content:center;align-items:center;height:100vh;}
+.box{background:#fff;color:#333;padding:30px;border-radius:12px;max-width:400px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,0.35);}
+h2{text-align:center;color:#2c5364;margin-bottom:20px;}
+input, select{width:100%;padding:12px;margin:8px 0;border-radius:6px;border:1px solid #ccc;}
+button{width:100%;padding:14px;margin-top:12px;font-size:16px;border:none;border-radius:8px;background:#2980b9;color:white;cursor:pointer;}
+label{font-weight:bold;}
+</style>
+</head>
+<body>
+
+<div class="box">
+  <h2>Login to Cargo RLD</h2>
+  <label for="email">Email</label>
+  <input type="email" id="email" placeholder="Enter email" required>
+
+  <label for="password">Password</label>
+  <input type="password" id="password" placeholder="Enter password" required>
+
+  <label for="role">I am a</label>
+  <select id="role">
+    <option value="customer">Customer</option>
+    <option value="driver">Driver</option>
+  </select>
+
+  <button onclick="login()">Login</button>
+</div>
+
+<script>
+function login(){
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const role = document.getElementById('role').value;
+
+  if(email === "" || password === ""){
+    alert("⚠️ Please enter email and password");
+    return;
+  }
+
+  // Demo credentials (replace with Firebase later)
+  // Customer: customer@cargo.com / 123456
+  // Driver: driver@cargo.com / 123456
+  if(role === "customer"){
+    if(email==="customer@cargo.com" && password==="123456"){
+      alert("✅ Customer login successful!");
+      window.location.href="customer_dashboard.html";
+    } else {
+      alert("❌ Invalid Customer login");
+    }
+  } else if(role === "driver"){
+    if(email==="driver@cargo.com" && password==="123456"){
+      alert("✅ Driver login successful!");
+      window.location.href="driver_dashboard.html";
+    } else {
+      alert("❌ Invalid Driver login");
+    }
+  }
+}
+</script>
+
+</body>
+</html>

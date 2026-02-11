@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Profile - Cargo RLD</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #2c5364, #203a43, #0f2027);
+  min-height: 100vh;
+  color: #fff;
+}
+
+.box {
+  background: #fff;
+  color: #333;
+  padding: 25px;
+  border-radius: 12px;
+  max-width: 420px;
+  margin: 30px auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  background: #2980b9;
+  color: white;
+  border: none;
+  border-radius: 8px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>Edit Profile</h2>
+
+  <input type="text" placeholder="Full Name">
+  <input type="email" placeholder="Email">
+  <input type="tel" placeholder="Phone Number">
+  <input type="text" placeholder="Address">
+
+  <button onclick="save()">Save Changes</button>
+</div>
+
+<script>
+function save() {
+  alert("Profile updated!");
+}
+</script>
+
+</body>
+</html>

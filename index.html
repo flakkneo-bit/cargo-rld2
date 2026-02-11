@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cargo RLD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #ffffff;
+      color: #333;
+      padding: 30px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 350px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      color: #2c5364;
+    }
+
+    p {
+      font-size: 14px;
+      margin-bottom: 25px;
+      color: #555;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .login-btn {
+      background-color: #2c5364;
+      color: #fff;
+    }
+
+    .register-btn {
+      background-color: #0f2027;
+      color: #fff;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Cargo RLD</h1>
+    <p>Move goods locally with trusted drivers</p>
+
+    <button class="login-btn" onclick="goLogin()">Login</button>
+    <button class="register-btn" onclick="goRegister()">Register</button>
+  </div>
+
+  <script>
+    function goLogin() {
+      window.location.href = "login.html";
+    }
+
+    function goRegister() {
+      window.location.href = "choose_role.html";
+    }
+  </script>
+
+</body>
+</html>

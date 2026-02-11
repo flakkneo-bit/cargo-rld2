@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Requests - Cargo RLD</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #2c5364, #203a43, #0f2027);
+  color: #fff;
+}
+
+.container {
+  padding: 20px;
+}
+
+.card {
+  background: #fff;
+  color: #333;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  margin-right: 5px;
+}
+
+.accept { background: #27ae60; }
+.reject { background: #c0392b; }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Delivery Requests</h2>
+  <div id="requestList"></div>
+</div>
+
+<script>
+let requests = JSON.parse(localStorage.getItem("requests")) || [];
+let list = document.getElementById("requestList");
+
+if (requests.length === 0) {
+  list.innerHTML = "<p>No requests yet.</p>";
+}
+
+requests.forEach((r, i) => {
+  list.innerHTML += `
+    <div class="card">
+      <p><b>From:</b> ${r.from}</p>
+      <p><b>To:</b> ${r.to}</p>
+      <p><b>Cargo:</b> ${r.cargo}</p>
+      <p><b>Price:</b> R${r.price}</p>
+      <p><b>Status:</b> ${r.status || "Pending"}</p>
+    </div>
+  `;
+});
+</script>
+
+</body>
+</html>

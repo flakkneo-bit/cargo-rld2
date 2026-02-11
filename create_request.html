@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Create Delivery Request - Cargo RLD</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#2c5364,#203a43,#0f2027);color:#fff;}
+.container{padding:20px;}
+input, textarea {width:100%;padding:12px;margin:8px 0;border-radius:6px;border:none;font-size:14px;}
+button {width:100%;padding:14px;margin-top:10px;border:none;border-radius:8px;background:#27ae60;color:#fff;cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Create New Delivery Request</h2>
+  <input type="text" id="from" placeholder="From" required>
+  <input type="text" id="to" placeholder="To" required>
+  <input type="text" id="cargo" placeholder="Cargo Description" required>
+  <input type="number" id="price" placeholder="Price (R)" required>
+  <button onclick="submitRequest()">Send Request</button>
+</div>
+
+<script>
+function submitRequest(){
+  let from = document.getElementById("from").value;
+  let to = document.getElementById("to").value;
+  let cargo = document.getElementById("cargo").value;
+  let price = document.getElementById("price").value;
+
+  if(!from || !to || !cargo || !price){ alert("Please fill all fields!"); return; }
+
+  let requests = JSON.parse(localStorage.getItem("requests")) || [];
+  requests.push({customer:"Demo Customer", from, to, cargo, price, status:"Pending"});
+  localStorage.setItem("requests", JSON.stringify(requests));
+  alert("Request sent!");
+  window.location.href="customer_dashboard.html";
+}
+</script>
+</body>
+</html>
