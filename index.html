@@ -62,6 +62,29 @@
     button:hover {
       opacity: 0.9;
     }
+    <!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+  // Your Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyBdnINehUrDecKFqux3h9PAQJ03Du96Nj8",
+    authDomain: "cargo-rld2.firebaseapp.com",
+    projectId: "cargo-rld2",
+    storageBucket: "cargo-rld2.firebasestorage.app",
+    messagingSenderId: "15997765872",
+    appId: "1:15997765872:web:b5bef9659a5f300e545a35"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  // Make services available
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+</script>
   </style>
 </head>
 <body>
