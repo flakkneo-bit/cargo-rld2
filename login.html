@@ -53,6 +53,7 @@
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
   <script>
     const firebaseConfig = {
@@ -65,6 +66,8 @@
     };
 
     firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
   </script>
 </head>
 
@@ -81,19 +84,35 @@
 
   <script>
     function loginUser() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
 
-      firebase.auth().signInWithEmailAndPassword(email, password)
-        .then(() => {
-          const role = localStorage.getItem("userRole");
-          if (role === "driver") {
+      if(!email || !password){
+        alert("Please enter email and password");
+        return;
+      }
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then(cred => {
+          // Get the user role from Firestore
+          return db.collection("users").doc(cred.user.uid).get();
+        })
+        .then(doc => {
+          if(!doc.exists){
+            alert("User data not found!");
+            return;
+          }
+          const role = doc.data().role;
+          // Save role locally for dashboard redirection
+          localStorage.setItem("userRole", role);
+
+          if(role === "driver"){
             window.location.href = "driver_dashboard.html";
           } else {
             window.location.href = "customer_dashboard.html";
           }
         })
-        .catch(error => alert(error.message));
+        .catch(err => alert(err.message));
     }
   </script>
 
