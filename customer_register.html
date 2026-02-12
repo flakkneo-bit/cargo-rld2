@@ -1,113 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Customer Registration - Cargo RLD</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Customer Register</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #2c5364, #203a43, #0f2027);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      color: #fff;
-    }
+<style>
+body{margin:0;font-family:Arial;background:linear-gradient(135deg,#2c5364,#203a43,#0f2027);display:flex;justify-content:center;align-items:center;height:100vh;}
+.box{background:#fff;padding:30px;border-radius:12px;max-width:360px;width:100%;}
+input,button{width:100%;padding:12px;margin:8px 0;}
+button{background:#2980b9;color:white;border:none;border-radius:8px;}
+</style>
 
-    .box {
-      background: #ffffff;
-      color: #333;
-      padding: 30px;
-      border-radius: 12px;
-      width: 100%;
-      max-width: 380px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-    }
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-    h2 {
-      text-align: center;
-      color: #2c5364;
-      margin-bottom: 20px;
-    }
+<script>
+firebase.initializeApp({
+  apiKey:"AIzaSyBdnINehUrDecKFqux3h9PAQJ03Du96Nj8",
+  authDomain:"cargo-rld2.firebaseapp.com",
+  projectId:"cargo-rld2"
+});
+const auth=firebase.auth();
+const db=firebase.firestore();
 
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
+function register(){
+  const name=document.getElementById("name").value;
+  const email=document.getElementById("email").value;
+  const password=document.getElementById("password").value;
 
-    button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 15px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      background-color: #2980b9;
-      color: white;
-      cursor: pointer;
-    }
-  </style>
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBdnINehUrDecKFqux3h9PAQJ03Du96Nj8",
-      authDomain: "cargo-rld2.firebaseapp.com",
-      projectId: "cargo-rld2",
-      storageBucket: "cargo-rld2.firebasestorage.app",
-      messagingSenderId: "15997765872",
-      appId: "1:15997765872:web:b5bef9659a5f300e545a35"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-  </script>
+  auth.createUserWithEmailAndPassword(email,password)
+  .then(cred=>{
+    return db.collection("users").doc(cred.user.uid).set({
+      name, email, role:"customer"
+    });
+  })
+  .then(()=>location.href="customer_dashboard.html");
+}
+</script>
 </head>
 
 <body>
-
-  <div class="box">
-    <h2>Customer Registration</h2>
-
-    <input type="text" id="name" placeholder="Full Name" required>
-    <input type="email" id="email" placeholder="Email Address" required>
-    <input type="password" id="password" placeholder="Password" required>
-
-    <button onclick="registerCustomer()">Register</button>
-  </div>
-
-  <script>
-    function registerCustomer() {
-      const name = document.getElementById("name").value;
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      if (!name || !email || !password) {
-        alert("Please fill all fields");
-        return;
-      }
-
-      firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then(() => {
-          localStorage.setItem("userName", name);
-          localStorage.setItem("userRole", "customer");
-          localStorage.setItem("userEmail", email);
-
-          alert("Customer registered successfully");
-          window.location.href = "customer_dashboard.html";
-        })
-        .catch(error => alert(error.message));
-    }
-  </script>
-
+<div class="box">
+<h2>Customer Registration</h2>
+<input id="name" placeholder="Full Name">
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+<button onclick="register()">Register</button>
+</div>
 </body>
 </html>
