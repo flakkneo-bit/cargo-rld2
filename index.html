@@ -16,7 +16,6 @@
       align-items: center;
       height: 100vh;
     }
-
     .container {
       background: #ffffff;
       color: #333;
@@ -27,84 +26,37 @@
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
-
-    h1 {
-      margin-bottom: 10px;
-      color: #2c5364;
-    }
-
-    p {
-      font-size: 14px;
-      margin-bottom: 25px;
-      color: #555;
-    }
-
+    h1 { color:#2c5364; }
     button {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
+      width:100%; padding:12px; margin:10px 0;
+      border:none; border-radius:5px; cursor:pointer;
     }
-
-    .login-btn {
-      background-color: #2c5364;
-      color: #fff;
-    }
-
-    .register-btn {
-      background-color: #0f2027;
-      color: #fff;
-    }
-
-    button:hover {
-      opacity: 0.9;
-    }
+    .login-btn{background:#2c5364;color:white;}
+    .register-btn{background:#0f2027;color:white;}
   </style>
-</head>
 
-<body>
-
-  <div class="container">
-    <h1>Cargo RLD</h1>
-    <p>Move goods locally with trusted drivers</p>
-
-    <button class="login-btn" onclick="goLogin()">Login</button>
-    <button class="register-btn" onclick="goRegister()">Register</button>
-  </div>
-
-  <!-- Firebase SDKs -->
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
   <script>
-    const firebaseConfig = {
+    firebase.initializeApp({
       apiKey: "AIzaSyBdnINehUrDecKFqux3h9PAQJ03Du96Nj8",
       authDomain: "cargo-rld2.firebaseapp.com",
-      projectId: "cargo-rld2",
-      storageBucket: "cargo-rld2.firebasestorage.app",
-      messagingSenderId: "15997765872",
-      appId: "1:15997765872:web:b5bef9659a5f300e545a35"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-
+      projectId: "cargo-rld2"
+    });
     const auth = firebase.auth();
     const db = firebase.firestore();
   </script>
+</head>
 
-  <script>
-    function goLogin() {
-      window.location.href = "login.html";
-    }
-
-    function goRegister() {
-      window.location.href = "choose_role.html";
-    }
-  </script>
-
+<body>
+  <div class="container">
+    <h1>Cargo RLD</h1>
+    <p>Move goods locally with trusted drivers</p>
+    <button class="login-btn" onclick="location.href='login.html'">Login</button>
+    <button class="register-btn" onclick="location.href='choose_role.html'">Register</button>
+  </div>
 </body>
 </html>
