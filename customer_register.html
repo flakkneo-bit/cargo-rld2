@@ -33,18 +33,13 @@
       margin-bottom: 20px;
     }
 
-    input, textarea {
+    input {
       width: 100%;
       padding: 12px;
       margin: 8px 0;
       border-radius: 6px;
       border: 1px solid #ccc;
       font-size: 14px;
-    }
-
-    textarea {
-      resize: none;
-      height: 70px;
     }
 
     button {
@@ -54,15 +49,28 @@
       font-size: 16px;
       border: none;
       border-radius: 8px;
-      background-color: #27ae60;
+      background-color: #2980b9;
       color: white;
       cursor: pointer;
     }
-
-    button:hover {
-      opacity: 0.9;
-    }
   </style>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBdnINehUrDecKFqux3h9PAQJ03Du96Nj8",
+      authDomain: "cargo-rld2.firebaseapp.com",
+      projectId: "cargo-rld2",
+      storageBucket: "cargo-rld2.firebasestorage.app",
+      messagingSenderId: "15997765872",
+      appId: "1:15997765872:web:b5bef9659a5f300e545a35"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+  </script>
 </head>
 
 <body>
@@ -70,20 +78,34 @@
   <div class="box">
     <h2>Customer Registration</h2>
 
-    <input type="text" placeholder="Full Name" required>
-    <input type="email" placeholder="Email Address" required>
-    <input type="tel" placeholder="Phone Number" required>
+    <input type="text" id="name" placeholder="Full Name" required>
+    <input type="email" id="email" placeholder="Email Address" required>
+    <input type="password" id="password" placeholder="Password" required>
 
-    <textarea placeholder="Residence Address" required></textarea>
-
-    <input type="password" placeholder="Password" required>
-
-    <button onclick="goDashboard()">Continue</button>
+    <button onclick="registerCustomer()">Register</button>
   </div>
 
   <script>
-    function goDashboard() {
-      window.location.href = "customer_dashboard.html";
+    function registerCustomer() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      if (!name || !email || !password) {
+        alert("Please fill all fields");
+        return;
+      }
+
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(() => {
+          localStorage.setItem("userName", name);
+          localStorage.setItem("userRole", "customer");
+          localStorage.setItem("userEmail", email);
+
+          alert("Customer registered successfully");
+          window.location.href = "customer_dashboard.html";
+        })
+        .catch(error => alert(error.message));
     }
   </script>
 
